@@ -1,13 +1,24 @@
-#' mini version of dygraphs
+#' Mini version of dygraphs
 #'
-#' R tutorial of htmlwidgets using {dygraph} Javascript library.
-#' 
+#' R tutorial of htmlwidgets using \href{http://dygraphs.com}{dygraph} Javascript library.
+#'
 #' @inheritParams htmlwidgets::createWidget
-#' 
-#' @param data Must be time series data which is xtsible
-#' 
-#' @import htmlwidgets
 #'
+#' @param data Time series data,
+#'   must be an \link[xts]{xts} object or an object which is convertible to
+#'   \code{xts}.
+#' @param main Main plot title (optional)
+#' @param xlab X axis label
+#' @param ylab Y axis label
+#' @param width Width in pixels (optional, defaults to automatic sizing)
+#' @param height Height in pixels (optional, defaults to automatic sizing)
+#'
+#' @return Interactive dygraph plot
+#'
+#' @examples
+#' library(minidygraphs)
+#' lungDeaths <- cbind(mdeaths, fdeaths)
+#' minidygraph(lungDeaths)
 #' @export
 minidygraph <-
   function(data,
@@ -15,7 +26,8 @@ minidygraph <-
            xlab = NULL,
            ylab = NULL,
            width = NULL,
-           height = NULL) {
+           height = NULL,
+           elementId = NULL) {
     if(xts::xtsible(data)) {
       if(!xts::is.xts(data))
         data <- xts::as.xts(data)
@@ -23,23 +35,21 @@ minidygraph <-
     } else {
       stop("Unsupported type passed to argument 'data'.")
     }
-    
-    if(is.null(periodicity)) {
-      periodicity <- xts::periodicity(data)
-    }
-    
+
+    periodicity <- xts::periodicity(data)
+
     # extract time
     time <- time(data)
-    
+
     # get data as a named list
     data <- zoo::coredata(data)
     data <- unclass(as.data.frame(data))
-    
+
     # merge time back into list and convert to JS friendly string
     timeColumn <- list()
     timeColumn[[periodicity$label]] <- asISO8601Time(time)
     data <- append(timeColumn, data)
-    
+
     # create native dygraph attrs object
     attrs <- list()
     attrs$title <- main
@@ -51,7 +61,7 @@ minidygraph <-
     attrs$axes$x <- list()
     attrs$axes$x$pixelsPerLabel <- 60
     attrs$axes$x$axisLabelWidth <- 70
-    
+
     # create x (dygraph attrs + some side data)
     x <- list()
     x$attrs <- attrs
@@ -60,10 +70,10 @@ minidygraph <-
     x$shadings <- list()
     x$events <- list()
     x$format <- format
-    
+
     names(data) <- NULL
     x$data <- data
-    
+
     # create widget
     htmlwidgets::createWidget(
       name = "minidygraphs",
