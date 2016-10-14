@@ -1,13 +1,13 @@
 Package: minidygraphs
 Title: Tutorial of htmlwidgets: use dygraph as the example
-Version: 0.0.0.1
+Version: 0.0.0.2
 Authors@R: person("Shuiping", "Chen", email = "shuiping.chen@alibaba-inc.com", role = c("aut", "cre"))
 Description: An R interface to the 'dygraphs' JavaScript charting library
     (a copy of which is included in the package). Provides rich facilities
     for charting time-series data in R, including highly configurable
     series- and axis-display and interactive features like zoom/pan and
     series/point highlighting.
-License: MIT + file LICENSE
+License: MIT
 Depends:
     R (>= 3.0)
 Imports:

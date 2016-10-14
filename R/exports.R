@@ -7,6 +7,12 @@
 #' @name dygraphs-exports
 NULL
 
+#' @importFrom magrittr %>%
+#' @name %>%
+#' @export
+#' @rdname dygraphs-exports
+NULL
+
 #' @importFrom zoo as.yearmon
 #' @name as.yearmon
 #' @export as.yearmon
